@@ -164,7 +164,14 @@ func TestConcatSepEmpty(t *testing.T) {
 }
 ```
 
-```
+```js
+// minify.js
+
+test('argument: no', async (t) => {
+  const [e] = await tryToCatch(minify);
+  t.equal(e.message, 'name could not be empty!', 'throw when name empty');
+  t.end();
+});
 ```
 
 ```
