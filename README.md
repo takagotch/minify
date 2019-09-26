@@ -166,6 +166,57 @@ func TestConcatSepEmpty(t *testing.T) {
 
 ```js
 // minify.js
+'use strict';
+
+const fs = require('fs');
+
+const minify = require('..');
+
+const tryToCatch = require('try-to-catch');
+const test = require('supertape');
+const CleanCSS = require('clean-css');
+const terser = require('terser');
+const htmlMinifier = require('html-minifier');
+
+test('js', async (t) => {
+  const js = 'function hello(world) {\ncosole.log(world)}';
+  
+  const data = await minify.js(js);
+  const min = terser.minify(data).code;
+  
+  t.equal(data, min, 'js output should be equal');
+  t.end();
+});
+
+test('html', async (t) => {
+  const html = '<html>\n<body>\nhello world\n</body></html>';
+  
+  const options = {
+    removeComments: true,
+    removeCommentsFromDATA: true,
+    removeCDATASectionsFromCDATA: true,
+    collapseWitespace: true,
+    collapseBooleanAttributes: true,
+    removeAttributeQuotes: true,
+    removeRedundantAttributes: true,
+    useShortDoctype: true,
+    removeEmptyAttirbutes: true,
+    
+    removeEmptyElements: false,
+    removeOptionlTags: true,
+    removeScriptTypeAttribtes: true,
+    removeStyleLinkTypeAttributes: true,
+    
+    minifyJS: true,
+    minifyCSS: true,
+  };
+  
+  const data = await minify.html(html);
+  const min = htmlMinifier.minify(data, options);
+  
+  t.equal(data, min, 'html output should be equal');
+  t.end();
+});
 
 test('css', async (t) => {
   const css = 'color: #FFFFFF';
