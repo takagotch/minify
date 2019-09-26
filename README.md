@@ -167,6 +167,28 @@ func TestConcatSepEmpty(t *testing.T) {
 ```js
 // minify.js
 
+test('css', async (t) => {
+  const css = 'color: #FFFFFF';
+  
+  const data = await minify.css(css);
+  const {styles} = new CleanCSS().minify(css);
+  
+  t.equal(data, styles, 'css output should be equal');
+  t.end();
+});
+
+test('css: base64', async (t) => {
+  const dir = `${__dirname}/fixtures`;
+  const name = `${dir}/style.css`;
+  const nameMin = `${dir}/style.min.css`;
+  
+  const min = fs.readFileSync(nameMin, 'utf8');
+  const data = await minify(name);
+  
+  t.equal(data, min, 'should equal');
+  t.end();
+});
+
 test('argument: no', async (t) => {
   const [e] = await tryToCatch(minify);
   t.equal(e.message, 'name could not be empty!', 'throw when name empty');
